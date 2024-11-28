@@ -21,6 +21,14 @@ import type {
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query'
+export type AuthenticateFromGithub201 = {
+  token: string;
+};
+
+export type AuthenticateFromGithubBody = {
+  code: string;
+};
+
 export type GetProfile200Profile = {
   avatarUrl: string;
   /** @nullable */
@@ -568,3 +576,75 @@ export function useGetProfile<TData = Awaited<ReturnType<typeof getProfile>>, TE
 
 
 
+/**
+ * Authenticate user from GitHub code
+ */
+export type authenticateFromGithubResponse = {
+  data: AuthenticateFromGithub201;
+  status: number;
+  headers: Headers;
+}
+
+export const getAuthenticateFromGithubUrl = () => {
+
+
+  return `http://localhost:3333/auth/github`
+}
+
+export const authenticateFromGithub = async (authenticateFromGithubBody: AuthenticateFromGithubBody, options?: RequestInit): Promise<authenticateFromGithubResponse> => {
+  
+  const res = await fetch(getAuthenticateFromGithubUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      authenticateFromGithubBody,)
+  }
+
+  )
+  const data = await res.json()
+
+  return { status: res.status, data, headers: res.headers }
+}
+
+
+
+
+export const getAuthenticateFromGithubMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authenticateFromGithub>>, TError,{data: AuthenticateFromGithubBody}, TContext>, fetch?: RequestInit}
+): UseMutationOptions<Awaited<ReturnType<typeof authenticateFromGithub>>, TError,{data: AuthenticateFromGithubBody}, TContext> => {
+const {mutation: mutationOptions, fetch: fetchOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authenticateFromGithub>>, {data: AuthenticateFromGithubBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  authenticateFromGithub(data,fetchOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthenticateFromGithubMutationResult = NonNullable<Awaited<ReturnType<typeof authenticateFromGithub>>>
+    export type AuthenticateFromGithubMutationBody = AuthenticateFromGithubBody
+    export type AuthenticateFromGithubMutationError = unknown
+
+    export const useAuthenticateFromGithub = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authenticateFromGithub>>, TError,{data: AuthenticateFromGithubBody}, TContext>, fetch?: RequestInit}
+): UseMutationResult<
+        Awaited<ReturnType<typeof authenticateFromGithub>>,
+        TError,
+        {data: AuthenticateFromGithubBody},
+        TContext
+      > => {
+
+      const mutationOptions = getAuthenticateFromGithubMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
