@@ -1,8 +1,8 @@
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { useAuthenticateFromGithub } from '../http/generated/api'
 import Cookies from 'universal-cookie'
+import { useAuthenticateFromGithub } from '../http/generated/api'
 
 export function SignInWithGithubCallback() {
   const navigate = useNavigate()

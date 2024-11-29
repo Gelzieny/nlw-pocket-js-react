@@ -2,15 +2,11 @@ import { Loader2 } from 'lucide-react'
 import { Dialog } from '@radix-ui/react-dialog'
 import { WeeklySummary } from '../components/weekly-summary'
 import { CreateGoal } from '../components/create-goal'
-import { useQuery } from '@tanstack/react-query'
-import { getSummary } from '../http/get-summary'
 import { EmptyGoals } from '../components/empty-goals'
+import { useGetWeekSummary } from '../http/generated/api'
 
 export function Application() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['summary'],
-    queryFn: getSummary,
-  })
+  const { data, isLoading } = useGetWeekSummary()
 
   if (isLoading || !data) {
     return (
